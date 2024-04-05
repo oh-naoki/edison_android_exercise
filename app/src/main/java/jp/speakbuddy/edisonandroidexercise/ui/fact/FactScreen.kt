@@ -6,14 +6,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,36 +19,38 @@ import jp.speakbuddy.edisonandroidexercise.ui.theme.EdisonAndroidExerciseTheme
 
 @Composable
 fun FactScreen(
-    viewModel: FactViewModel
+    viewModel: FactViewModel,
+) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    FactContent(uiState = uiState, onUpdateFactClicked = { viewModel.updateFact() })
+}
+
+@Composable
+fun FactContent(
+    uiState: FactUiState,
+    onUpdateFactClicked: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(
-            space = 16.dp,
-            alignment = Alignment.CenterVertically
+            space = 16.dp, alignment = Alignment.CenterVertically
         )
     ) {
-        var fact by remember { mutableStateOf("") }
-
         Text(
-            text = "Fact",
-            style = MaterialTheme.typography.titleLarge
+            text = "Fact", style = MaterialTheme.typography.titleLarge
         )
 
         Text(
-            text = fact,
-            style = MaterialTheme.typography.bodyLarge
+            text = uiState.fact, style = MaterialTheme.typography.bodyLarge
         )
 
-        val onClick = {
-            fact = viewModel.updateFact { print("done") }
-        }
-
-        Button(onClick = onClick) {
+        Button(onClick = onUpdateFactClicked) {
             Text(text = "Update fact")
         }
     }
@@ -61,6 +60,6 @@ fun FactScreen(
 @Composable
 private fun FactScreenPreview() {
     EdisonAndroidExerciseTheme {
-        FactScreen(viewModel = FactViewModel())
+        FactContent(uiState = FactUiState(fact = "Cats are cute"), onUpdateFactClicked = {})
     }
 }
