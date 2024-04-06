@@ -27,9 +27,9 @@ class FactViewModel @Inject constructor(
             _uiState.update {
                 it.copy(fact = fact, error = null)
             }
-        }.catch {
+        }.catch { throwable ->
             _uiState.update {
-                it.copy(error = it.error)
+                it.copy(error = throwable)
             }
         }.launchIn(viewModelScope)
     }
