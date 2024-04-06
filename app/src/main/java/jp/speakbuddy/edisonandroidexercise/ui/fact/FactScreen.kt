@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import jp.speakbuddy.edisonandroidexercise.network.FactResponse
 import jp.speakbuddy.edisonandroidexercise.ui.theme.EdisonAndroidExerciseTheme
 
 @Composable
@@ -42,16 +43,48 @@ fun FactContent(
             space = 16.dp, alignment = Alignment.CenterVertically
         )
     ) {
+        Title(containsCats = uiState.containsCats)
+        Body(fact = uiState.fact, isLongFact = uiState.isLongFact)
+        Button(onClick = onUpdateFactClicked) {
+            Text(text = "Update fact")
+        }
+    }
+}
+
+@Composable
+fun Title(
+    containsCats: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
         Text(
             text = "Fact", style = MaterialTheme.typography.titleLarge
         )
+        if (containsCats) {
+            Text(text = "Multiple cats!!", style = MaterialTheme.typography.titleMedium)
+        }
+    }
+}
 
+@Composable
+fun Body(
+    fact: FactResponse,
+    isLongFact: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
         Text(
-            text = uiState.fact, style = MaterialTheme.typography.bodyLarge
+            text = fact.fact, style = MaterialTheme.typography.bodyLarge
         )
 
-        Button(onClick = onUpdateFactClicked) {
-            Text(text = "Update fact")
+        if (isLongFact) {
+            Text(
+                text = "length: ${fact.length}",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier
+                    .padding(end = 16.dp)
+                    .align(Alignment.End)
+            )
         }
     }
 }
@@ -59,7 +92,8 @@ fun FactContent(
 @Preview
 @Composable
 private fun FactScreenPreview() {
+    val label = "Cat is cute"
     EdisonAndroidExerciseTheme {
-        FactContent(uiState = FactUiState(fact = "Cats are cute"), onUpdateFactClicked = {})
+        FactContent(uiState = FactUiState(fact = FactResponse(label, label.length)), onUpdateFactClicked = {})
     }
 }

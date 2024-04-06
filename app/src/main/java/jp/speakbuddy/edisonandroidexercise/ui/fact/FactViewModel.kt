@@ -3,6 +3,7 @@ package jp.speakbuddy.edisonandroidexercise.ui.fact
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import jp.speakbuddy.edisonandroidexercise.network.FactResponse
 import jp.speakbuddy.edisonandroidexercise.repository.FactRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +25,7 @@ class FactViewModel @Inject constructor(
     fun updateFact() {
         factRepository.fetchFact().onEach { fact ->
             _uiState.update {
-                it.copy(fact = fact.fact, error = null)
+                it.copy(fact = fact, error = null)
             }
         }.catch {
             _uiState.update {
@@ -35,11 +36,14 @@ class FactViewModel @Inject constructor(
 }
 
 data class FactUiState(
-    val fact: String,
+    val fact: FactResponse,
     val error: Throwable? = null,
 ) {
     companion object {
-        val initial = FactUiState(fact = "")
+        val initial = FactUiState(fact = FactResponse("", 0))
     }
+
+    val isLongFact = fact.length >= 100
+    val containsCats = fact.fact.contains("cats", ignoreCase = true)
 }
 
