@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.android.junit5)
 
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.hilt.android)
@@ -95,10 +96,18 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.retrofit)
 
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.kotst.assertions)
+    testImplementation(libs.mockk.android)
+    testImplementation(libs.turbine)
     testImplementation(libs.junit)
+    testImplementation(libs.junit.jupiter.api)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 }

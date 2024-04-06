@@ -5,7 +5,6 @@ import jp.speakbuddy.edisonandroidexercise.network.FactResponse
 import jp.speakbuddy.edisonandroidexercise.storage.FactLocalDataSource
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
@@ -15,8 +14,6 @@ class FactRepository @Inject constructor(
 ) {
     fun fetchFact() = factNetworkDataSource.fetchFact().onEach {
         factLocalDataSource.saveFact(it)
-    }.map {
-        it
     }.catch {
         val fact = factLocalDataSource.factList.first()
         emit(
