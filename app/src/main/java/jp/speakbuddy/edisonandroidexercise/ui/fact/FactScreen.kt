@@ -13,10 +13,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import jp.speakbuddy.edisonandroidexercise.network.FactResponse
 import jp.speakbuddy.edisonandroidexercise.ui.theme.EdisonAndroidExerciseTheme
+import jp.speakbuddy.edisonandroidexercise.ui.theme.OrientationPreviews
 
 @Composable
 fun FactScreen(
@@ -89,11 +91,24 @@ fun Body(
     }
 }
 
-@Preview
+class UserProfileProvider : PreviewParameterProvider<FactUiState> {
+    override val values = sequenceOf(
+        FactUiState(fact = FactResponse("Cats lap liquid from the underside of their tongue, not from the top.", 69)),
+        FactUiState(
+            fact = FactResponse(
+                "There is a species of cat smaller than the average housecat. It is native to Africa and it is the Black-footed cat (Felis nigripes). Its top weight is 5.5 pounds.",
+                162
+            ), error = null
+        ),
+    )
+}
+
+@OrientationPreviews
 @Composable
-private fun FactScreenPreview() {
-    val label = "Cat is cute"
+private fun FactScreenPreview(
+    @PreviewParameter(UserProfileProvider::class) uiState: FactUiState,
+) {
     EdisonAndroidExerciseTheme {
-        FactContent(uiState = FactUiState(fact = FactResponse(label, label.length)), onUpdateFactClicked = {})
+        FactContent(uiState = uiState, onUpdateFactClicked = {})
     }
 }
