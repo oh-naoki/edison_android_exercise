@@ -1,10 +1,28 @@
 package jp.speakbuddy.edisonandroidexercise.repository
 
-import jp.speakbuddy.edisonandroidexercise.network.FactService
+import jp.speakbuddy.edisonandroidexercise.network.FactNetworkDataSource
+import jp.speakbuddy.edisonandroidexercise.network.FactResponse
+import jp.speakbuddy.edisonandroidexercise.storage.FactLocalDataSource
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class FactRepository @Inject constructor(
-    private val factService: FactService,
+    private val factNetworkDataSource: FactNetworkDataSource,
+    private val factLocalDataSource: FactLocalDataSource,
 ) {
-    suspend fun fetchFact() = factService.getFact()
+    fun fetchFact() = factNetworkDataSource.fetchFact().onEach {
+        factLocalDataSource.saveFact(it)
+    }.map {
+        it
+    }.catch {
+        val fact = factLocalDataSource.factList.first()
+        emit(
+            FactResponse(
+                fact = fact.fact, length = fact.length
+            )
+        )
+    }
 }
