@@ -15,7 +15,7 @@ import retrofit2.Retrofit
 object NetworkModule {
 
     @Provides
-    fun provideRepositoryService(): Retrofit =
+    fun provideRetrofit(): Retrofit =
         Retrofit.Builder().baseUrl("https://catfact.ninja/").addConverterFactory(Json.asConverterFactory("application/json".toMediaType())).build()
 
     @Provides

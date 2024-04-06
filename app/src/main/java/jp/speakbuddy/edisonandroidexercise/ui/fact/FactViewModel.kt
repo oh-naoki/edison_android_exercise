@@ -43,6 +43,7 @@ data class FactUiState(
         val initial = FactUiState(fact = FactResponse("", 0))
     }
 
+    // MEMO: モデルに含めるロジックか悩んだがこの画面特有のロジックであると判断し、ViewModel に持たせた
     val isLongFact = fact.length >= 100
     val containsCats = fact.fact.contains("cats", ignoreCase = true)
 }
