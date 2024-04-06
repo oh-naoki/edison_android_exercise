@@ -15,7 +15,7 @@ plugins {
 
 android {
     namespace = "jp.speakbuddy.edisonandroidexercise"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "jp.speakbuddy.edisonandroidexercise"
@@ -84,6 +84,7 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.datastore)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     implementation(libs.protobuf.kotlin.lite)

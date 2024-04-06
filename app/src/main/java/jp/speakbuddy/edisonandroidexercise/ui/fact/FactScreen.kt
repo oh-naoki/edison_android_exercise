@@ -19,7 +19,7 @@ import jp.speakbuddy.edisonandroidexercise.ui.theme.EdisonAndroidExerciseTheme
 
 @Composable
 fun FactScreen(
-    viewModel: FactViewModel,
+    viewModel: FactViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
